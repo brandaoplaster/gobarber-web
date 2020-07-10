@@ -13,12 +13,17 @@ import Button from '../../components/Button';
 
 import { Container, Content, Background } from './styles';
 
+interface SignInFormData {
+  email: string;
+  password: string;
+}
+
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { signIn } = useContext(Auth);
 
   const handleSubimit = useCallback(
-    async (data: object) => {
+    async (data: SignInFormData) => {
       try {
         formRef.current?.setErrors({});
         const shema = Yup.object().shape({
@@ -27,10 +32,15 @@ const SignIn: React.FC = () => {
             .email('Digite um e-mail valido'),
           password: Yup.string().required('Password é obrigatória'),
         });
+
         await shema.validate(data, {
           abortEarly: false,
         });
-        signIn();
+
+        signIn({
+          email: data.email,
+          password: data.password,
+        });
       } catch (error) {
         const errors = getValidationErrors(error);
         formRef.current?.setErrors(errors);
