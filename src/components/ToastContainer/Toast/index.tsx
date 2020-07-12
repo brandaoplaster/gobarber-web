@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FiAlertCircle, FiXCircle } from 'react-icons/fi';
 import { ToastMessage, useToast } from '../../../hooks/toast';
 
@@ -10,6 +10,15 @@ interface ToastProps {
 
 const Toast: React.FC<ToastProps> = ({ message }) => {
   const { removeToast } = useToast();
+
+  useEffect(() => {
+    const time = setTimeout(() => {
+      removeToast(message.id);
+    }, 5000);
+    return () => {
+      clearTimeout(time);
+    };
+  }, [message.id, removeToast]);
 
   return (
     <Container type={message.type} hasDescription={!!message.description}>
