@@ -5,6 +5,7 @@ import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import getValidationErrors from '../../utils/getValidationErrors';
 import { useAuth } from '../../hooks/auth';
+import { useToast } from '../../hooks/toast';
 
 import logoImg from '../../assets/logo.svg';
 
@@ -21,6 +22,7 @@ interface SignInFormData {
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { signIn } = useAuth();
+  const { addToast } = useToast();
 
   const handleSubimit = useCallback(
     async (data: SignInFormData) => {
@@ -46,9 +48,14 @@ const SignIn: React.FC = () => {
           const errors = getValidationErrors(error);
           formRef.current?.setErrors(errors);
         }
+        addToast({
+          type: 'error',
+          title: 'Error na autentição',
+          description: 'Ocorreu um erro ao fazer login, cheque as credencias',
+        });
       }
     },
-    [signIn],
+    [addToast, signIn],
   );
 
   return (

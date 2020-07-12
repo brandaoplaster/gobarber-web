@@ -13,7 +13,6 @@ const App: React.FC = () => (
       {/* <SignUp /> */}
     </AppProvider>
 
-    <ToastContainer />
     <GlobalStyle />
   </>
 );
